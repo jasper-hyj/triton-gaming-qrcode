@@ -133,9 +133,19 @@ export default function QRCodeInfoBar({
                 type="color"
                 value={qrcode.bgColor}
                 onChange={(e) => setQrcode({ ...qrcode, bgColor: e.target.value })}
-                className="h-12 w-full cursor-pointer rounded-2xl border border-[#8ba7c4]/20 bg-[#061126]/85 p-2"
-                disabled={loading}
+                className="h-12 w-full cursor-pointer rounded-2xl border border-[#8ba7c4]/20 bg-[#061126]/85 p-2 disabled:cursor-not-allowed disabled:opacity-40"
+                disabled={loading || qrcode.transparentBg}
               />
+              <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-slate-400">
+                <input
+                  type="checkbox"
+                  checked={qrcode.transparentBg}
+                  onChange={(e) => setQrcode({ ...qrcode, transparentBg: e.target.checked })}
+                  className="h-3.5 w-3.5 rounded border-white/20 bg-slate-900 text-[#f59e0b]"
+                  disabled={loading}
+                />
+                Transparent
+              </label>
             </div>
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="dotsColor">
@@ -370,6 +380,36 @@ export default function QRCodeInfoBar({
 
           <div className="rounded-[28px] border border-[#f59e0b]/20 bg-[#f59e0b]/10 p-5 text-sm leading-6 text-amber-100">
             Keep contrast high between the background and modules to preserve scan reliability.
+          </div>
+
+          <div>
+            <p className="mb-2 text-sm font-medium text-slate-200">Download format</p>
+            <div className="flex gap-3">
+              {(["png", "jpeg"] as const).map((fmt) => (
+                <label
+                  key={fmt}
+                  className={`flex cursor-pointer items-center gap-2 rounded-2xl border px-4 py-2 text-sm transition ${
+                    qrcode.downloadFormat === fmt
+                      ? "border-[#f59e0b] bg-[#f59e0b]/15 text-amber-300"
+                      : "border-[#8ba7c4]/20 bg-[#061126]/70 text-slate-300 hover:border-[#f59e0b]/40"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="downloadFormat"
+                    value={fmt}
+                    checked={qrcode.downloadFormat === fmt}
+                    onChange={() => setQrcode({ ...qrcode, downloadFormat: fmt })}
+                    className="sr-only"
+                    disabled={loading}
+                  />
+                  {fmt.toUpperCase()}
+                  {fmt === "jpeg" && qrcode.transparentBg && (
+                    <span className="text-xs text-amber-500">(no alpha)</span>
+                  )}
+                </label>
+              ))}
+            </div>
           </div>
         </div>
       </div>

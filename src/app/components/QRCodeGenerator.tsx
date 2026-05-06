@@ -22,6 +22,8 @@ export type QRCode = {
   icon: "tg-color" | "tg-minimal" | "none" | "custom";
   customIcon: string | null;
   margin: number;
+  transparentBg: boolean;
+  downloadFormat: "png" | "jpeg";
 };
 
 type QRcodeStyledProp = {
@@ -107,7 +109,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
         },
 
         backgroundOptions: {
-          color: qrcode.bgColor,
+          color: qrcode.transparentBg ? "#00000000" : qrcode.bgColor,
         },
 
         cornersSquareOptions: {
@@ -130,7 +132,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
         width: qrcode.size,
         height: qrcode.size,
         margin: qrcode.margin,
-        backgroundOptions: { color: qrcode.bgColor },
+        backgroundOptions: { color: qrcode.transparentBg ? "#00000000" : qrcode.bgColor },
         imageOptions: {
           crossOrigin: "anonymous",
           hideBackgroundDots: true,
@@ -159,7 +161,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
     if (!qrCodeRef.current) return;
     await qrCodeRef.current.download({
       name: `${qrcode.url}-${qrcode.size}x${qrcode.size}`,
-      extension: "png",
+      extension: qrcode.downloadFormat,
     });
   };
 
@@ -174,7 +176,10 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
       </div>
 
       <div className="flex min-h-[360px] items-center justify-center rounded-[28px] border border-[#8ba7c4]/20 bg-[linear-gradient(135deg,_rgba(0,41,81,0.96),_rgba(11,31,67,0.88))] p-4 sm:p-6">
-        <div className="flex w-full max-w-full items-center justify-center overflow-hidden rounded-[24px] bg-white p-4 shadow-[0_12px_40px_rgba(15,23,42,0.28)]">
+        <div
+          className="flex w-full max-w-full items-center justify-center overflow-hidden rounded-[24px] p-4 shadow-[0_12px_40px_rgba(15,23,42,0.28)]"
+          style={qrcode.transparentBg ? { backgroundImage: "repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%)", backgroundSize: "20px 20px" } : { backgroundColor: "white" }}
+        >
           <div
             ref={qrRef}
             className="flex w-full max-w-full items-center justify-center [&>canvas]:h-auto [&>canvas]:max-w-full [&>svg]:h-auto [&>svg]:max-w-full"
@@ -198,7 +203,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
         disabled={!qrcode.url.trim()}
         className="inline-flex items-center justify-center rounded-full bg-[#f59e0b] px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#facc15] disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
       >
-        Download PNG
+        Download {qrcode.downloadFormat.toUpperCase()}
       </button>
     </aside>
   );

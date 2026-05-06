@@ -7,7 +7,7 @@ import QRCodeInfoBar from "./qrcode/components/QRCodeCreator";
 
 export default function HomePage() {
   const [qrcode, setQrcode] = useState<QRCode>({
-    url: "",
+    url: "https://www.example.com",
     size: 500,
     bgColor: "#ffffff",
     dotsColor: "#1e3a8a",
@@ -22,6 +22,8 @@ export default function HomePage() {
     icon: "tg-color",
     customIcon: null,
     margin: 10,
+    transparentBg: false,
+    downloadFormat: "png",
   });
 
   const [generate, setGenerate] = useState<boolean>(false);
