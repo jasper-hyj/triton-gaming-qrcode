@@ -22,6 +22,7 @@ export default function HomePage() {
     icon: "tg-color",
     customIcon: null,
     margin: 10,
+    iconPadding: 6,
     transparentBg: false,
     downloadFormat: "png",
   });

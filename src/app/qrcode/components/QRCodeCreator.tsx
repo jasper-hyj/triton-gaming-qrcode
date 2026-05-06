@@ -298,7 +298,6 @@ export default function QRCodeInfoBar({
                   setQrcode({
                     ...qrcode,
                     icon: e.target.value as QRCode["icon"],
-                    customIcon: e.target.value === "custom" ? qrcode.customIcon : qrcode.customIcon,
                   })
                 }
                 className="w-full rounded-2xl border border-[#8ba7c4]/20 bg-[#061126]/85 px-4 py-3 text-slate-100 outline-none transition focus:border-[#f59e0b]"
@@ -306,6 +305,12 @@ export default function QRCodeInfoBar({
               >
                 <option value="tg-color">TG logo</option>
                 <option value="tg-minimal">TG logo small</option>
+                <option value="website">Website</option>
+                <option value="link">Link</option>
+                <option value="email">Email</option>
+                <option value="phone">Phone</option>
+                <option value="location">Location</option>
+                <option value="wifi">Wi-Fi</option>
                 <option value="none">No icon</option>
                 <option value="custom">Custom upload</option>
               </select>
@@ -375,6 +380,36 @@ export default function QRCodeInfoBar({
             />
             <p className="mt-2 text-xs leading-5 text-slate-400">
               Uploading an image automatically switches the QR code to the custom icon option.
+            </p>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="iconPadding">
+              Icon padding
+            </label>
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+              <input
+                id="iconPadding"
+                type="range"
+                min="0"
+                max="24"
+                step="1"
+                value={qrcode.iconPadding}
+                onChange={(e) =>
+                  setQrcode({
+                    ...qrcode,
+                    iconPadding: Number.parseInt(e.target.value, 10),
+                  })
+                }
+                className="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-700 accent-[#f59e0b] disabled:cursor-not-allowed"
+                disabled={loading || qrcode.icon === "none"}
+              />
+              <div className="inline-flex min-w-20 items-center justify-center rounded-xl border border-[#8ba7c4]/20 bg-[#061126]/85 px-3 py-2 text-sm font-medium text-slate-200">
+                {qrcode.iconPadding}px
+              </div>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-slate-400">
+              Increases spacing around the center icon for clearer separation from QR modules.
             </p>
           </div>
 

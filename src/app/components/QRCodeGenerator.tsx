@@ -19,9 +19,20 @@ export type QRCode = {
   dotsType: "square" | "dots" | "rounded" | "extra-rounded" | "classy" | "classy-rounded";
   cornersSquareType: "dot" | "square" | "extra-rounded";
   cornersDotType: "dot" | "square";
-  icon: "tg-color" | "tg-minimal" | "none" | "custom";
+  icon:
+    | "tg-color"
+    | "tg-minimal"
+    | "link"
+    | "website"
+    | "email"
+    | "phone"
+    | "location"
+    | "wifi"
+    | "none"
+    | "custom";
   customIcon: string | null;
   margin: number;
+  iconPadding: number;
   transparentBg: boolean;
   downloadFormat: "png" | "jpeg";
 };
@@ -33,6 +44,12 @@ type QRcodeStyledProp = {
 const iconMap: Record<Exclude<QRCode["icon"], "custom">, string | StaticImageData | undefined> = {
   "tg-color": tgLogo,
   "tg-minimal": tgLogo,
+  link: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M10%2014L7%2017a3%203%200%201%201-4-4l3-3a3%203%200%200%201%204%200%22/%3E%3Cpath%20d%3D%22M14%2010l3-3a3%203%200%201%201%204%204l-3%203a3%203%200%200%201-4%200%22/%3E%3Cpath%20d%3D%22M8.5%2015.5l7-7%22/%3E%3C/svg%3E",
+  website: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22/%3E%3Cpath%20d%3D%22M3%2012h18%22/%3E%3Cpath%20d%3D%22M12%203a15%2015%200%200%201%200%2018%22/%3E%3Cpath%20d%3D%22M12%203a15%2015%200%200%200%200%2018%22/%3E%3C/svg%3E",
+  email: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%223%22%20y%3D%226%22%20width%3D%2218%22%20height%3D%2212%22%20rx%3D%222%22/%3E%3Cpath%20d%3D%22M4%208l8%206%208-6%22/%3E%3C/svg%3E",
+  phone: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8.8%203h6.4a1.8%201.8%200%200%201%201.8%201.8v14.4a1.8%201.8%200%200%201-1.8%201.8H8.8A1.8%201.8%200%200%201%207%2019.2V4.8A1.8%201.8%200%200%201%208.8%203Z%22/%3E%3Cpath%20d%3D%22M10%206h4%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2217%22%20r%3D%220.8%22%20fill%3D%22%23002951%22%20stroke%3D%22none%22/%3E%3C/svg%3E",
+  location: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%202a7%207%200%200%201%207%207c0%205-7%2013-7%2013S5%2014%205%209a7%207%200%200%201%207-7Z%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%229%22%20r%3D%222.5%22/%3E%3C/svg%3E",
+  wifi: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23002951%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3.5%209a13%2013%200%200%201%2017%200%22/%3E%3Cpath%20d%3D%22M6.5%2012.5a9%209%200%200%201%2011%200%22/%3E%3Cpath%20d%3D%22M9.8%2016a4.2%204.2%200%200%201%204.4%200%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2219%22%20r%3D%221.2%22%20fill%3D%22%23002951%22%20stroke%3D%22none%22/%3E%3C/svg%3E",
   none: undefined,
 };
 
@@ -57,7 +74,19 @@ function getImageSize(icon: QRCode["icon"]) {
     return 0;
   }
 
-  return icon === "tg-minimal" ? 0.28 : 0.4;
+  if (icon === "tg-color") {
+    return 0.4;
+  }
+
+  if (icon === "tg-minimal") {
+    return 0.28;
+  }
+
+  if (icon === "custom") {
+    return 0.34;
+  }
+
+  return 0.3;
 }
 
 function getDotsGradient(qrcode: QRCode) {
@@ -99,7 +128,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
           crossOrigin: "anonymous",
           hideBackgroundDots: true,
           imageSize: getImageSize(qrcode.icon),
-          margin: 0,
+          margin: qrcode.iconPadding,
         },
 
         dotsOptions: {
@@ -137,7 +166,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
           crossOrigin: "anonymous",
           hideBackgroundDots: true,
           imageSize: getImageSize(qrcode.icon),
-          margin: 0,
+          margin: qrcode.iconPadding,
         },
         dotsOptions: {
           color: qrcode.dotsColor,
@@ -171,7 +200,7 @@ const QRCodeStyled = ({ qrcode }: QRcodeStyledProp) => {
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#facc15]">Preview</p>
         <h2 className="mt-2 text-2xl font-semibold text-white">Live output</h2>
         <p className="mt-2 text-sm leading-6 text-slate-300">
-          The preview reflects your current settings. Download a PNG when you are ready.
+          The preview reflects your current settings. Download PNG or JPEG when you are ready.
         </p>
       </div>
 
